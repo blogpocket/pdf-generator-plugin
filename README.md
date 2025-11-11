@@ -1,92 +1,226 @@
-=== PDF Generator por Etiqueta ===
-Contributors: Antonio Cambronero
-Tags: pdf, dompdf, media-library, taxonomy, custom-post-types
-Requires at least: 4.7
-Tested up to: 6.4
-Stable tag: 1.14
+# Generador de PDF Personalizado para WordPress
 
-PDF Generator por Etiqueta genera un PDF con todos los posts (o CPT) de una etiqueta seleccionada.
-Incluye portada, texto introductorio opcional (HTML permitido), posts con contenido completo,
-texto final opcional (HTML permitido) y numeración de páginas. Desde la versión 1.14, incorpora
-un interruptor para excluir completamente todas las imágenes del PDF.
+Plugin de WordPress que permite generar PDFs personalizados a partir de posts, páginas y taxonomías seleccionadas, con una interfaz de administración intuitiva.
 
-== Description ==
+## 📋 Características
 
-Este plugin permite exportar a PDF una colección de posts —de cualquier tipo de contenido—
-filtrados por etiquetas de su taxonomía correspondiente. El PDF se guarda automáticamente en
-la Biblioteca de Medios.
+- **Interfaz de administración simple e intuitiva**
+- **Selección flexible de contenido:**
+  - Tipos de contenido (Entradas, Páginas, Custom Post Types)
+  - Taxonomías (Categorías, Etiquetas, taxonomías personalizadas)
+  - Términos específicos dentro de cada taxonomía
+- **Generación automática de portada** con título e imagen destacada
+- **Formato profesional del contenido:**
+  - Preserva encabezados (H1-H6)
+  - Mantiene negritas, cursivas y enlaces
+  - Respeta listas ordenadas y desordenadas
+  - Incluye blockquotes con estilo
+  - Ajusta automáticamente tamaños de fuente pequeños para legibilidad
+- **Procesamiento inteligente de imágenes:**
+  - Ajuste automático al ancho de página
+  - Mantiene proporciones originales
+  - Soporte para imágenes locales y externas
+  - Alta resolución (300 DPI)
+- **Cada post en una página nueva** con título y fecha de publicación
+- **Guardado automático** en la Librería de Medios de WordPress
 
-Características principales:
+## 🚀 Instalación
 
-* Selección de tipo de contenido
-* Selección de taxonomía y etiqueta
-* Título del PDF personalizado
-* Texto introductorio opcional (HTML permitido)
-* Texto final opcional (HTML permitido)
-* Interruptor para excluir todas las imágenes del PDF
-* Numeración de páginas
-* PDF almacenado directamente en la Librería de Medios
+### Requisitos previos
 
-== Installation ==
+- WordPress 5.0 o superior
+- PHP 7.2 o superior
+- Librería TCPDF
 
-1. Sube la carpeta del plugin a `wp-content/plugins/pdf-generator-plugin/`.
-2. Instala Dompdf con Composer:
+### Pasos de instalación
 
+1. **Descargar el plugin:**
+   ```bash
+   git clone https://github.com/tu-usuario/wp-pdf-generator.git
+   cd wp-pdf-generator
    ```
-   cd wp-content/plugins/pdf-generator-plugin
-   composer require dompdf/dompdf
+
+2. **Instalar TCPDF:**
+   
+   Descarga TCPDF desde [su repositorio oficial](https://github.com/tecnickcom/TCPDF) y colócala en la carpeta del plugin:
+   
+   ```bash
+   cd wp-content/plugins/pdf-generator
+   mkdir -p lib
+   cd lib
+   git clone https://github.com/tecnickcom/TCPDF.git tcpdf
+   ```
+   
+   O descarga el ZIP y descomprímelo en `lib/tcpdf/`
+
+3. **Estructura de carpetas:**
+   ```
+   wp-content/plugins/pdf-generator/
+   ├── pdf-generator.php
+   ├── lib/
+   │   └── tcpdf/
+   │       ├── tcpdf.php
+   │       ├── config/
+   │       ├── fonts/
+   │       └── ...
+   ├── assets/
+   │   ├── css/
+   │   │   └── admin.css (generado automáticamente)
+   │   └── js/
+   │       └── admin.js (generado automáticamente)
+   └── README.md
    ```
 
-3. Activa **PDF Generator por Etiqueta** en el panel de administración de WordPress.
-4. Ve al menú **PDF por Etiqueta** y selecciona:
-   - Tipo de contenido
-   - Taxonomía
-   - Etiqueta
-   - Opcional: Título del PDF
-   - Opcional: Texto introductorio (HTML permitido)
-   - Opcional: Texto final (HTML permitido)
-   - Opcional: Activar “Excluir todas las imágenes”
-5. Haz clic en **Generar PDF**.
+4. **Activar el plugin:**
+   - Ve a WordPress Admin → Plugins
+   - Busca "Generador de PDF Personalizado"
+   - Haz clic en "Activar"
 
-== Frequently Asked Questions ==
+## 📖 Uso
 
-= ¿Cómo funciona el interruptor "Excluir todas las imágenes"? =
+### Interfaz de administración
 
-Si se activa, el PDF no incluirá:
-- Imágenes destacadas
-- Imágenes de portada
-- Imágenes dentro de los posts
-- Imágenes en los textos introductorio o final
+1. En el panel de WordPress, ve a **Generador PDF** en el menú lateral
+2. Selecciona el **Tipo de Contenido** (Entradas, Páginas, etc.)
+3. *Opcional:* Selecciona una **Taxonomía** (Categorías, Etiquetas, etc.)
+4. *Opcional:* Si seleccionaste una taxonomía, elige un **Término Específico**
+5. *Opcional:* Añade un **Título personalizado** para el PDF
+6. Haz clic en **Generar PDF**
 
-Todas las etiquetas `<img>` se eliminan del HTML de forma segura.
+### Estructura del PDF generado
 
-= ¿Puedo usar HTML en los textos? =
+- **Portada:** Título del documento + imagen destacada del primer post
+- **Contenido:** Cada post en una página nueva con:
+  - Título del post
+  - Fecha de publicación
+  - Contenido completo con formato
+  - Imágenes ajustadas y centradas
 
-Sí, se permite cualquier HTML que pase por `wp_kses_post`.
-Puedes incluir enlaces, listas, párrafos, estilos básicos…
+### Ejemplos de uso
 
-= ¿Cómo personalizo el tamaño de los encabezados? =
+**Generar PDF de todos los posts de una categoría:**
+```
+Tipo de Contenido: Entradas
+Taxonomía: Categorías
+Término: Noticias
+```
 
-Edita el bloque `<style>` dentro de la función `pgeb_generate_pdf()`:
-- `h1.title` controla el título de portada
-- `h1.post-title` controla el título de cada post
-- Puedes añadir reglas CSS adicionales si lo necesitas
+**Generar PDF de todas las páginas:**
+```
+Tipo de Contenido: Páginas
+Taxonomía: (vacío)
+Término: (vacío)
+```
 
-== Changelog ==
+**Generar PDF de posts con una etiqueta específica:**
+```
+Tipo de Contenido: Entradas
+Taxonomía: Etiquetas
+Término: Tutorial
+```
 
-= 1.14 =
-* Añadido interruptor “Excluir todas las imágenes”.
-* Eliminación completa de `<img>` cuando la opción está activa.
-* Código reorganizado y simplificado.
+## 🎨 Características de formato
 
-= 1.13 =
-* Soporte para HTML en el texto introductorio y en el texto final.
+### Texto
+- **Encabezados:** H1-H6 con tamaños jerárquicos
+- **Negritas y cursivas:** Totalmente preservadas
+- **Enlaces:** Clickeables con color azul
+- **Listas:** Con viñetas o números
+- **Citas (blockquotes):** Con borde y fondo gris claro
+- **Tamaño mínimo de fuente:** 9pt para legibilidad
 
-= 1.12 =
-* Se añadieron los campos de texto y checkboxes para intro y final.
+### Imágenes
+- Ancho máximo: 170mm (ajustado a página A4)
+- Resolución: 300 DPI
+- Centradas automáticamente
+- Proporción original mantenida
+- Salto de página automático si no cabe
 
-= 1.11 =
-* Mejoras menores y correcciones visuales.
+## 🔧 Personalización
 
-= 1.10 =
-* Título del PDF personalizable.
+### Modificar tamaños de fuente
+
+Edita la función `improve_html_for_pdf()` en `pdf-generator.php`:
+
+```php
+$content = preg_replace('/<h1([^>]*)>/i', '<h1 style="font-size: 24pt; ..."$1>', $content);
+```
+
+### Cambiar márgenes
+
+Modifica en la función `generate_pdf_file()`:
+
+```php
+$pdf->SetMargins(20, 20, 20); // izquierda, arriba, derecha
+```
+
+### Ajustar ancho de imágenes
+
+En la función donde se procesan las imágenes:
+
+```php
+$max_width = 170; // mm - Cambia este valor
+```
+
+## 🐛 Resolución de problemas
+
+### El selector de términos no aparece
+1. Desactiva y reactiva el plugin
+2. Limpia la caché del navegador
+3. Verifica la consola del navegador (F12) para errores JavaScript
+
+### Error "TCPDF no encontrado"
+- Verifica que la carpeta `lib/tcpdf/` existe
+- Asegúrate de que el archivo `tcpdf.php` está en esa ubicación
+- Verifica permisos de lectura en la carpeta
+
+### Las imágenes no aparecen
+- Verifica que las imágenes están en la librería de medios
+- Comprueba permisos de lectura en `wp-content/uploads/`
+- Revisa el registro de errores de PHP
+
+### Timeout al generar PDF
+Si tienes muchos posts:
+- Aumenta el `max_execution_time` en PHP
+- Filtra por taxonomía/término para reducir posts
+- Contacta con tu hosting para aumentar límites
+
+## 📝 Changelog
+
+### Version 1.0.0
+- Lanzamiento inicial
+- Interfaz de administración
+- Generación de PDFs con formato completo
+- Soporte para imágenes
+- Guardado en librería de medios
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia GPL v2 o posterior - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## 👤 Autor
+
+Antonio Cambronero (Blogpocket.com) - [@blogpocket](https://github.com/blogpocket)
+
+## 🙏 Agradecimientos
+
+- [TCPDF](https://github.com/tecnickcom/TCPDF) - Librería para generación de PDFs
+- Comunidad de WordPress por su excelente documentación
+
+## 📞 Soporte
+
+¿Problemas o preguntas? Abre un [issue](https://github.com/blogpocket/wp-pdf-generator/issues) en GitHub.
+
+---
+
+**Nota:** Este plugin requiere la librería TCPDF que debe instalarse por separado debido a su tamaño.
