@@ -35,12 +35,10 @@ Plugin de WordPress que permite generar PDFs personalizados a partir de posts, p
 ### Pasos de instalación
 
 1. **Descargar el plugin:**
-   ```bash
-   git clone https://github.com/tu-usuario/wp-pdf-generator.git
-   cd wp-pdf-generator
-   ```
 
-2. **Instalar TCPDF:**
+   Descarga el zip y súbelo a tu instalación de WordPress.
+   
+3. **Instalar TCPDF:**
    
    Descarga TCPDF desde [su repositorio oficial](https://github.com/tecnickcom/TCPDF) y colócala en la carpeta del plugin:
    
@@ -53,7 +51,7 @@ Plugin de WordPress que permite generar PDFs personalizados a partir de posts, p
    
    O descarga el ZIP y descomprímelo en `lib/tcpdf/`
 
-3. **Estructura de carpetas:**
+4. **Estructura de carpetas:**
    ```
    wp-content/plugins/pdf-generator/
    ├── pdf-generator.php
@@ -71,7 +69,7 @@ Plugin de WordPress que permite generar PDFs personalizados a partir de posts, p
    └── README.md
    ```
 
-4. **Activar el plugin:**
+5. **Activar el plugin:**
    - Ve a WordPress Admin → Plugins
    - Busca "Generador de PDF Personalizado"
    - Haz clic en "Activar"
